@@ -1,0 +1,47 @@
+<%- include("partials/header.ejs") %>
+    <div class="container">
+        <span
+            class="container justify-content-center profile badge text-center d-flex align-items-center p-1 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill">
+            <img class="rounded-circle" width="100" height="100" src="https://github.com/mdo.png" alt="profilePic">
+        </span>
+
+        <form action="/profile/submit" method="POST" class="w-100 me-3 post">
+            <textarea class="form-control" required type="text" id="post" name="userPost"
+                placeholder="Wanna say something?"></textarea>
+            <button class="btn btn-primary" type="submit">Post</button>
+        </form>
+
+        <div class="px-4 py-5 my-5 text-center articles">
+            <h2 class="display-5 fw-bold text-body-emphasis">Published Articles</h2>
+            <% if (locals.userPosts && userPosts.length> 0) { %>
+                <% userPosts.toReversed().forEach((post, i)=> {
+                    const index = userPosts.length - 1 - i; %>
+                    <div class="userPost col-lg-6 mx-auto">
+                        <p class="lead mb-4">
+                            <%= post %>
+                        </p>
+
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center post-actions">
+                            <form action="/edit/<%= index %>" method="POST" style="display: none;" class="edit">
+                                <textarea class="form-control" name="updatedPost"><%= post %></textarea>
+                                <button class="btn btn-outline-secondary save" type="submit">Save</button>
+                            </form>
+
+                            <button class="btn btn-primary btn-lg px-4 edit-toggle" type="button">Edit</button>
+
+                            <form action="/delete/<%= index %>" method="POST" class="delete-form">
+                                <button class="btn btn-outline-secondary btn-lg px-4 delete"
+                                    type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <script>
+                                document.querySelector('h2').textContent = "No posts yet. Write your first one!"
+                            </script>
+                            <% } %>
+
+        </div>
+    </div>
+    <%- include("partials/footer.ejs") %>
